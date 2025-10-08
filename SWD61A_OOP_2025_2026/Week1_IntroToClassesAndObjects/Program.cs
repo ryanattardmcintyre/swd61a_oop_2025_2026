@@ -14,6 +14,24 @@ namespace Week1_IntroToClassesAndObjects
     {
         static void Main(string[] args)
         {
+            //Library related stuff:
+            Library myLibrary = new Library(); //declaring and instantiating the Library class and object
+
+            Book myBook1 = new Book();
+            myBook1.Id = 1;
+            myBook1.Title = "Test";
+            myBook1.Price = 50;
+
+            myLibrary.Add(myBook1);
+
+            Console.WriteLine($"Library no. of books: {myLibrary.BookCount}");
+            //Console.WriteLine("Library no. of books: " + myLibrary.BookCount);
+
+            Console.ReadKey();
+
+
+            // Basic Stuff:
+
             Book myBook = new Book();
             myBook.Stock = -100;
 

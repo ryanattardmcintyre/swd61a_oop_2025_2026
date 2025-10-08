@@ -36,7 +36,7 @@ namespace Week1_IntroToClassesAndObjects //logical grouping of things e.g. group
                 if (value < DateTime.Now.Year) 
                     publishedYear = value;
                 else
-                    publishedYear = DateTime.Now.Year;
+                    publishedYear = DateTime.Now.Year; //we cannot allow 2026, 2027,...
             }
         }
         public Genre Genre { get; set; }
