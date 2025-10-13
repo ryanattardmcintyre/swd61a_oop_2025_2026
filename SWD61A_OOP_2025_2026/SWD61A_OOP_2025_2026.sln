@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week1_IntroToClassesAndObjects", "Week1_IntroToClassesAndObjects\Week1_IntroToClassesAndObjects.csproj", "{4F4D183B-0585-4906-9178-AD979F82A7B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week2_InheritanceAndPolymorphism", "Week2_InheritanceAndPolymorphism\Week2_InheritanceAndPolymorphism.csproj", "{DA73FAD6-28CA-4982-A129-C291DFE906F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4F4D183B-0585-4906-9178-AD979F82A7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F4D183B-0585-4906-9178-AD979F82A7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F4D183B-0585-4906-9178-AD979F82A7B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA73FAD6-28CA-4982-A129-C291DFE906F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA73FAD6-28CA-4982-A129-C291DFE906F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA73FAD6-28CA-4982-A129-C291DFE906F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA73FAD6-28CA-4982-A129-C291DFE906F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

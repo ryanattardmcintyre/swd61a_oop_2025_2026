@@ -18,6 +18,8 @@ namespace Week1_IntroToClassesAndObjects
         //             it runs FIRST
         public Library() { 
             books = new List<Book>(); //instantiation of/initialization of list of books
+
+            //books.Add(new Book() { Id = 1, Title = "test" });
         }
 
 
