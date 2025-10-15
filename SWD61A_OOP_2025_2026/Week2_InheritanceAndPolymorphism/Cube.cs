@@ -8,6 +8,13 @@ namespace Week2_InheritanceAndPolymorphism
 {
     public class Cube : Square
     {
+        public Cube() : base() {
+            CanvasType = "3D";
+        }
+        public Cube(int x, int y, int z, double length) : base(x, y, length)
+        {
+            Z = z;
+        }
         public override double FindArea()
         {
             return base.FindArea() * 6;

@@ -9,6 +9,11 @@ namespace Week2_InheritanceAndPolymorphism
 {
     public class Circle: Square
     {
+        public Circle(): base() { }
+
+        public Circle(int x, int y, double length) :base(x,y, length) { }
+      
+
         public override string Describe()
         {
             return $"Circle: {Id} at ({X}, {Y}) of color {Color.Name} also of diameter {Length}";

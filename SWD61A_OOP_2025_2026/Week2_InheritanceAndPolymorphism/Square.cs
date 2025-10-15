@@ -29,6 +29,18 @@ namespace Week2_InheritanceAndPolymorphism
 
     public class Square: Point
     {
+        //constructor
+        public Square():base() //default constructor - you're trusing the consumer to set the properties at a later stage
+        {
+        }
+
+        //non-default constructor -  you're forcing the consumer to assign the parameters immediately
+        public Square(int x, int y, double length) : base(x,y) //calling the base (i.e. Point) constructor to pass x,y
+        {
+            Length = length;
+        }
+
+        //property
        public double Length { get; set; }
 
         public override string Describe()
@@ -48,11 +60,7 @@ namespace Week2_InheritanceAndPolymorphism
             g.DrawRectangle(p, X, Y, (float) Length, (float) Length);
         }
 
-        //to do:
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
+  
 
         //Task: Implement FindArea in all shapes
         //Task 2:
