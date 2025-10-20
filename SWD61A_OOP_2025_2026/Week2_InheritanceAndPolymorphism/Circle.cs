@@ -12,8 +12,12 @@ namespace Week2_InheritanceAndPolymorphism
         public Circle(): base() { }
 
         public Circle(int x, int y, double length) :base(x,y, length) { }
-      
 
+        public Circle (int x, int y) 
+        {
+            X = x; Y = y;
+        }
+      
         public override string Describe()
         {
             return $"Circle: {Id} at ({X}, {Y}) of color {Color.Name} also of diameter {Length}";
@@ -31,6 +35,20 @@ namespace Week2_InheritanceAndPolymorphism
         {
             return Math.PI * Math.Pow((Length)/2, 2);
         }
+
+        public void Scale()
+        {
+            this.Length++;
+        }
+        public void Scale(double percentage)
+        { 
+            this.Length *= percentage;
+        }
+        public void Scale(int pixels)
+        {
+            this.Length += pixels;
+        }
+
     }
    
 }

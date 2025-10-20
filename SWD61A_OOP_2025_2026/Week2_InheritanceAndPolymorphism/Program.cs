@@ -11,8 +11,6 @@ namespace Week2_InheritanceAndPolymorphism
     {
         static void Main(string[] args)
         {
-             
-
             List<Square> myShapes = new List<Square>();
 
             string menuChoice = "";
