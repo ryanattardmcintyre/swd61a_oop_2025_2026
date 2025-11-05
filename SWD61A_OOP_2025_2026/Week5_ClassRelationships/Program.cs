@@ -13,6 +13,10 @@ namespace Week5_ClassRelationships
         {
             //Composition/ composite type of relationship
 
+            Room myKitchen = new Room();
+
+
+
             Building myHouse = new Building();
             myHouse.Number = 1;
             myHouse.City = "Valletta";

@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregation\Attendance.cs" />
+    <Compile Include="Aggregation\Group.cs" />
+    <Compile Include="Aggregation\ICsv.cs" />
+    <Compile Include="Aggregation\Lecturer.cs" />
+    <Compile Include="Aggregation\Person.cs" />
+    <Compile Include="Aggregation\Student.cs" />
+    <Compile Include="Aggregation\Unit.cs" />
     <Compile Include="Composition\Example1\Building.cs" />
     <Compile Include="Composition\Example1\ComputerLab.cs" />
     <Compile Include="Composition\Example1\IPlot.cs" />

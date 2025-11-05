@@ -18,6 +18,7 @@ namespace Week5_ClassRelationships.Composition.Example1
         {
             Building = b;
         }
+    
 
         protected virtual int GetNumberOfApertures()
         { return 1; }
