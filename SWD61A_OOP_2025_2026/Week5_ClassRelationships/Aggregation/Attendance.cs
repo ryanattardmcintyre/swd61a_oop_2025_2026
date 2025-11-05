@@ -13,6 +13,10 @@ using System.Threading.Tasks;
            // Example 1: Attendance - Student
            // Example 2: Group - Unit (1-many)
 
+//Association is the weakest form of relationship which implies Class A can make use of
+           // Class B i.e. Class A doesn't store an instance of Class B
+           //e.g. Attendance and Person
+
 
 namespace Week5_ClassRelationships.Aggregation
 {
@@ -41,8 +45,10 @@ namespace Week5_ClassRelationships.Aggregation
         protected List<Student> PresentStudents;
         protected List<Student> AbsentStudents;
 
-        public void TakeAttendance(Student s, bool present)
+        public void TakeAttendance(Student s, bool present, Person l)
         {
+            if(l.GetRole() != "Lecturer") { return; }
+
             if(present)
             {
                 PresentStudents.Add(s);
