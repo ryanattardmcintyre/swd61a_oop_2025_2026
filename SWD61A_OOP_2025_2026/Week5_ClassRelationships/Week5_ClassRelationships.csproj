@@ -50,6 +50,14 @@
     <Compile Include="Aggregation\Person.cs" />
     <Compile Include="Aggregation\Student.cs" />
     <Compile Include="Aggregation\Unit.cs" />
+    <Compile Include="Association\BlackFridayPayment.cs" />
+    <Compile Include="Association\Event.cs" />
+    <Compile Include="Association\IPayment.cs" />
+    <Compile Include="Association\NoPromotion.cs" />
+    <Compile Include="Association\Payment.cs" />
+    <Compile Include="Association\Seat.cs" />
+    <Compile Include="Association\Ticket.cs" />
+    <Compile Include="Association\User.cs" />
     <Compile Include="Composition\Example1\Building.cs" />
     <Compile Include="Composition\Example1\ComputerLab.cs" />
     <Compile Include="Composition\Example1\IPlot.cs" />
