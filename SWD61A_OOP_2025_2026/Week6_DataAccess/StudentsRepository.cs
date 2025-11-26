@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Week6_Common; //namespace holding the abstraction of the database
@@ -44,7 +45,8 @@ namespace Week6_DataAccess
         {
             //lambda expression
 
-            return Get().Where(s => s.Name.StartsWith(filter));
+            return Get().Where(s => s.Name.ToLower().StartsWith(filter.ToLower())
+                                    || s.Surname.ToLower().StartsWith(filter.ToLower()));
 
             //a filter on the entire list of students is being applied
             //filter has a condition where if Name of student
@@ -79,10 +81,15 @@ namespace Week6_DataAccess
             // from a student instance by means of a NAVIGATIONAL PROPERTY
             // automatically created called Group
 
-            return Get().Where(s => s.Group.Name.Contains(groupName)
-             || s.Group.Name.StartsWith(groupName));
-        }
 
+            //Select Group.*, Students.*
+            //From Students inner join Groups
+            //On Students.GroupFK equals Groups.Id
+            //Group.Name like '%@groupName%'
+
+            return Get().Where(s => s.Group.Name.Contains(groupName));
+        }
+        
 
         public Student Get(int id) {
         
