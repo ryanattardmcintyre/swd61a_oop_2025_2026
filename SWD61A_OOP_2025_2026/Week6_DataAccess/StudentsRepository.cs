@@ -7,6 +7,11 @@ using Week6_Common; //namespace holding the abstraction of the database
 
 namespace Week6_DataAccess
 {
+    //Repository classes will be holding CRUD operations
+    //C = Create
+    //R = Read
+    //U = Update
+    //D = Delete
     public class StudentsRepository
     {
         //AttendanceDbContext is an abstraction of the database
