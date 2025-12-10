@@ -17,7 +17,7 @@ namespace Week6_Presentation
 
             AttendanceDbContext db = new AttendanceDbContext(); //database abstraction/represents the database
             StudentsRepository studentsRepository = new StudentsRepository(db); //using this object to manage students'data
-
+            GroupsRepository groupsRepository = new GroupsRepository(db);
 
 
             //--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace Week6_Presentation
                 switch (mainMenuChoice)
                 {
                     case 1:
-                        StudentsMenu(studentsRepository);
+                        StudentsMenu(studentsRepository, groupsRepository);
                         break;
 
                     case 5:
@@ -58,7 +58,7 @@ namespace Week6_Presentation
         }
 
 
-        static void StudentsMenu(StudentsRepository studentsRepository)
+        static void StudentsMenu(StudentsRepository studentsRepository, GroupsRepository groupsRepository)
         {
             int studentMenuChoice = 0;
 
@@ -70,6 +70,8 @@ namespace Week6_Presentation
                 Console.WriteLine("2. List students by group");
                 Console.WriteLine("3. Search for student");
                 Console.WriteLine("4. Add");
+                Console.WriteLine("5. Update");
+                Console.WriteLine("6. Delete");
 
                 Console.WriteLine("10. Go back to the main menu");
                 Console.WriteLine("Input your choice:");
@@ -133,6 +135,49 @@ namespace Week6_Presentation
 
                         break;
 
+                    case 4:
+                        Student myNewStudent = new Student();
+
+                        Console.WriteLine("Type in the student's name");
+                        myNewStudent.Name = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's surname");
+                        myNewStudent.Surname = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's idcard");
+                        myNewStudent.IdCard = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's phone");
+                        myNewStudent.Phone = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's email");
+                        myNewStudent.Email = Console.ReadLine();
+
+
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Group");
+                        Console.WriteLine("-----------------------");
+                        foreach(var group in groupsRepository.Get())
+                        {
+                            Console.WriteLine($"{group.Id} - {group.Name}");
+                        }
+                        
+                        Console.WriteLine("Type in the student's group ID");
+                        myNewStudent.GroupFK = Convert.ToInt32(Console.ReadLine());
+
+                        studentsRepository.Add(myNewStudent);
+                       
+                        Console.WriteLine("Click any button to return back to Students Menu...");
+                        Console.ReadKey();
+
+                        break;
+
+
+                    case 5:
+                        break;
+
+                    case 6:
+                        break;
 
 
 
@@ -150,4 +195,5 @@ namespace Week6_Presentation
 
     }
 }
+
 

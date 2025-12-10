@@ -95,5 +95,35 @@ namespace Week6_DataAccess
         
             return Get().FirstOrDefault(s=> s.Id == id);
         }
+
+        public void Add(Student student) { 
+        
+            _context.Students.Add(student); //this adds the instance to the memory
+            _context.SaveChanges(); //permanently saves it into the database
+        }
+
+        public void Update(Student student) {
+
+            var original = Get(student.Id); //fetches the original student as it is in the db
+            original.Name = student.Name; //overwrites the old name with the new name
+            original.Surname = student.Surname;
+            original.GroupFK = student.GroupFK;
+            original.Email = student.Email;
+            original.Phone = student.Phone;
+            original.IdCard = student.IdCard;
+            //note the primary key should never be overwritten
+
+            _context.SaveChanges(); //these saves the "original" student in the database
+        }
+
+        public void Delete(int id) {
+            var original = Get(id); //retrieve the student to be deleted
+
+            _context.Students.Remove(original); //remove it
+
+            _context.SaveChanges(); //save the deletion outcome to the db
+
+        }
+
     }
 }
