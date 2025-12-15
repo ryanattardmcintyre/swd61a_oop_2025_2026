@@ -18,6 +18,8 @@ namespace Week6_Presentation
             AttendanceDbContext db = new AttendanceDbContext(); //database abstraction/represents the database
             StudentsRepository studentsRepository = new StudentsRepository(db); //using this object to manage students'data
             GroupsRepository groupsRepository = new GroupsRepository(db);
+            AttendancesRepository attendancesRepository = new AttendancesRepository(db);
+            UnitsRepository unitsRepository = new UnitsRepository(db);
 
 
             //--------------------------------------------------------------------------
@@ -44,6 +46,10 @@ namespace Week6_Presentation
                         StudentsMenu(studentsRepository, groupsRepository);
                         break;
 
+                    case 4:
+                        AttendancesMenu(attendancesRepository, studentsRepository, unitsRepository, groupsRepository);
+                        break;
+
                     case 5:
                         Console.WriteLine("Press any key to terminate the application...");
                         break;
@@ -56,6 +62,76 @@ namespace Week6_Presentation
 
 
         }
+
+        //attendancesRepository, studentsRepository, unitsRepository, groupsRepository
+        static void AttendancesMenu(AttendancesRepository attendancesRepository, 
+            StudentsRepository studentsRepository, 
+            UnitsRepository unitsRepository,
+            GroupsRepository groupsRepository)
+        {
+            int attendanceMenuChoice = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine(" ============== Attendance menu ============== ");
+                Console.WriteLine("1. Take attendance");
+                Console.WriteLine("2. List attendance for student");
+                Console.WriteLine("3. Display Absenteesim for student");
+                Console.WriteLine("4. Top 5 present students");
+                Console.WriteLine("5. Top 5 present students for group");
+                Console.WriteLine("6. Top 5 present studetns for group within a date range");
+
+                Console.WriteLine("Input choice");
+                attendanceMenuChoice = Convert.ToInt32(Console.ReadLine());
+
+                switch (attendanceMenuChoice) {
+                    case 1:
+
+                        //---------------------- asking the user choose group ------------------
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Group");
+                        Console.WriteLine("-----------------------");
+                        foreach (var group in groupsRepository.Get())
+                        {
+                            Console.WriteLine($"{group.Id} - {group.Name}");
+                        }
+
+                        Console.WriteLine("Type in the group ID");
+                        int groupId = Convert.ToInt32(Console.ReadLine());
+
+                        //---------------------- asking the user choose unit ------------------
+
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Unit");
+                        Console.WriteLine("-----------------------");
+                        foreach (var unit in unitsRepository.Get())
+                        {
+                            Console.WriteLine($"{unit.Id} - {unit.Code} - {unit.Programme}");
+                        }
+
+                        Console.WriteLine("Type in the unit ID");
+                        int unitId = Convert.ToInt32(Console.ReadLine());
+
+                        //-------------------- taking the attendance for all students ---------
+
+                        //1. implement statusesRepository
+                        //2. get a list of students in selected group <- this has been done
+                        //3. foreach student in list 
+                        //3a show details of student
+                        //3b display the statuses on screen like in Units and Groups
+                        //3c ask for the input
+                        //3d record the attendance record in a temp list
+                        //3e after the loop call the TakeAttendance(List...)
+
+
+
+                        break;
+                
+                }
+
+            } while (attendanceMenuChoice != 999);
+        }
+
 
 
         static void StudentsMenu(StudentsRepository studentsRepository, GroupsRepository groupsRepository)
@@ -174,9 +250,57 @@ namespace Week6_Presentation
 
 
                     case 5:
+                        Console.WriteLine("Write down the id of the student that needs updating");
+                        int studentId = Convert.ToInt32(Console.ReadLine());
+                        Student studentToUpdate = new Student();
+                        studentToUpdate.Id = studentId;
+                      
+                        Console.WriteLine("Type in the student's name");
+                        studentToUpdate.Name = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's surname");
+                        studentToUpdate.Surname = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's idcard");
+                        studentToUpdate.IdCard = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's phone");
+                        studentToUpdate.Phone = Console.ReadLine();
+
+                        Console.WriteLine("Type in the student's email");
+                        studentToUpdate.Email = Console.ReadLine();
+
+
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Group");
+                        Console.WriteLine("-----------------------");
+                        foreach (var group in groupsRepository.Get())
+                        {
+                            Console.WriteLine($"{group.Id} - {group.Name}");
+                        }
+
+                        Console.WriteLine("Type in the student's group ID");
+                        studentToUpdate.GroupFK = Convert.ToInt32(Console.ReadLine());
+
+
+                        studentsRepository.Update(studentToUpdate);
+
+                        Console.WriteLine("Update successfull! " +
+                            "Click any button to return back to Students Menu...");
+                        Console.ReadKey();
+
                         break;
 
                     case 6:
+                        Console.WriteLine("Write down the id of the student that needs to be deleted");
+                        int studentToBeDeletedId = Convert.ToInt32(Console.ReadLine());
+                        studentsRepository.Delete(studentToBeDeletedId);
+                        
+                        Console.WriteLine("Delete successfull! " +
+                            "Click any button to return back to Students Menu...");
+                        Console.ReadKey();
+
+
                         break;
 
 

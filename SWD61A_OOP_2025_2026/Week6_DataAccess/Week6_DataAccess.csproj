@@ -51,9 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttendancesRepository.cs" />
     <Compile Include="GroupsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudentsRepository.cs" />
+    <Compile Include="UnitsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Week6_Common\Week6_Common.csproj">
