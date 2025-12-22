@@ -20,6 +20,8 @@ namespace Week6_Presentation
             GroupsRepository groupsRepository = new GroupsRepository(db);
             AttendancesRepository attendancesRepository = new AttendancesRepository(db);
             UnitsRepository unitsRepository = new UnitsRepository(db);
+            StatusesRepository statusesRepository = new StatusesRepository(db);
+            StatsRepository statsRepository = new StatsRepository(db);
 
 
             //--------------------------------------------------------------------------
@@ -47,7 +49,10 @@ namespace Week6_Presentation
                         break;
 
                     case 4:
-                        AttendancesMenu(attendancesRepository, studentsRepository, unitsRepository, groupsRepository);
+                        AttendancesMenu(attendancesRepository, 
+                            studentsRepository, unitsRepository, 
+                            groupsRepository, statusesRepository,
+                            statsRepository);
                         break;
 
                     case 5:
@@ -67,7 +72,8 @@ namespace Week6_Presentation
         static void AttendancesMenu(AttendancesRepository attendancesRepository, 
             StudentsRepository studentsRepository, 
             UnitsRepository unitsRepository,
-            GroupsRepository groupsRepository)
+            GroupsRepository groupsRepository,
+            StatusesRepository statusRepository, StatsRepository statsRepository)
         {
             int attendanceMenuChoice = 0;
             do
@@ -75,11 +81,13 @@ namespace Week6_Presentation
                 Console.Clear();
                 Console.WriteLine(" ============== Attendance menu ============== ");
                 Console.WriteLine("1. Take attendance");
-                Console.WriteLine("2. List attendance for student");
+                Console.WriteLine("2. List attendance for group & unit & day");
                 Console.WriteLine("3. Display Absenteesim for student");
                 Console.WriteLine("4. Top 5 present students");
                 Console.WriteLine("5. Top 5 present students for group");
-                Console.WriteLine("6. Top 5 present studetns for group within a date range");
+                Console.WriteLine("6. Top 5 present students for group within a date range");
+
+                Console.WriteLine("7. List attendance for student");
 
                 Console.WriteLine("Input choice");
                 attendanceMenuChoice = Convert.ToInt32(Console.ReadLine());
@@ -117,14 +125,109 @@ namespace Week6_Presentation
                         //1. implement statusesRepository
                         //2. get a list of students in selected group <- this has been done
                         //3. foreach student in list 
-                        //3a show details of student
-                        //3b display the statuses on screen like in Units and Groups
-                        //3c ask for the input
-                        //3d record the attendance record in a temp list
+
+                        var listOfStudents = studentsRepository.GetByGroup(groupId);
+                        List<Attendance> attendanceList = new List<Attendance>();
+                        foreach(var student in listOfStudents)
+                        {
+                            //3a show details of student
+                            Console.WriteLine($"{student.Id} - {student.Name} {student.Surname}");
+                            //3b display the statuses on screen like in Units and Groups
+                            Console.WriteLine($"Choose the right status by inputting the id next to it");
+                            foreach (var status in statusRepository.Get())
+                            { 
+                                Console.Write($"{status.Id} - {status.Name} | ");
+                            }
+
+                            //3c ask for the input
+                            int statusForStudent = Convert.ToInt32(Console.ReadLine());
+
+                            //3d record the attendance record in a temp list
+                            attendanceList.Add(new Attendance() { 
+                               StatusFK = statusForStudent,
+                                StudentFK = student.Id, UnitFK = unitId
+                            });
+                        }
+
                         //3e after the loop call the TakeAttendance(List...)
+                        attendancesRepository.TakeAttendances(attendanceList);
 
 
+                        Console.WriteLine("Attendance saved!! Press any button to go back to the Attendances menu...");
+                        Console.ReadKey();
 
+
+                        break;
+
+
+                    case 2:
+                        //listing of attendances by group, day, and unit
+                        //---------------------- asking the user choose group ------------------
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Group");
+                        Console.WriteLine("-----------------------");
+                        foreach (var group in groupsRepository.Get())
+                        {
+                            Console.WriteLine($"{group.Id} - {group.Name}");
+                        }
+
+                        Console.WriteLine("Type in the group ID");
+                        int groupIdFor2 = Convert.ToInt32(Console.ReadLine());
+
+                        //---------------------- asking the user choose unit ------------------
+
+                        Console.WriteLine();
+                        Console.WriteLine("Id - Unit");
+                        Console.WriteLine("-----------------------");
+                        foreach (var unit in unitsRepository.Get())
+                        {
+                            Console.WriteLine($"{unit.Id} - {unit.Code} - {unit.Programme}");
+                        }
+
+                        Console.WriteLine("Type in the unit ID");
+                        int unitIdFor2 = Convert.ToInt32(Console.ReadLine());
+
+                        //----------------------- date ----------------------------------
+
+
+                        Console.WriteLine("Input the day");
+                        int day = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Input the month");
+                        int month = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Input the year");
+                        int year = Convert.ToInt32(Console.ReadLine());
+
+                        DateTime forgedDate1 = new DateTime(year, month, day);
+                        DateTime forgedDate2 = new DateTime(year, month, day, 23,59,59);
+
+
+                        //--------------------- start the search -------------------------
+
+                        var listOfStudentsFor2 = studentsRepository.GetByGroup(groupIdFor2);
+                        
+                        foreach(var student in listOfStudentsFor2)
+                        {
+                            var a =attendancesRepository.GetAttendance(student.Id, forgedDate1, forgedDate2, unitIdFor2).
+                            FirstOrDefault();
+                            if(a != null)
+                                Console.WriteLine($"{a.DateTaken.ToString("dd/MM/yyyy HH:mm")} " +
+                                    $"- {a.FullName}, {a.GroupName}, {a.UnitName} - {a.Status}");
+                        
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+
+                        break;
+
+
+                    case 3:
+                        Console.WriteLine("Input the student id");
+                        int studentFor3 = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine(" Absent % " + statsRepository.GetAbsenteesim(studentFor3));
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
                         break;
                 
                 }

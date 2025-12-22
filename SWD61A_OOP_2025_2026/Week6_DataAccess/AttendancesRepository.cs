@@ -56,7 +56,7 @@ namespace Week6_DataAccess
                                  select new AttendanceDetailsViewModel()
                                    {
                                        DateTaken = attendance.DatePlaced,
-                                       FullName = attendance.Student.Name + ' ' + attendance.Student.Surname,
+                                       FullName = attendance.Student.Name + " " + attendance.Student.Surname,
                                        GroupName = attendance.Student.Group.Name,
                                        UnitName = attendance.Unit.Code,
                                        Status = attendance.Status.Name
@@ -79,7 +79,7 @@ namespace Week6_DataAccess
                         select new AttendanceDetailsViewModel()
                         {
                             DateTaken = attendance.DatePlaced,
-                            FullName = attendance.Student.Name + ' ' + attendance.Student.Surname,
+                            FullName = attendance.Student.Name + " " + attendance.Student.Surname,
                             GroupName = attendance.Student.Group.Name,
                             UnitName = attendance.Unit.Code,
                             Status = attendance.Status.Name
@@ -89,5 +89,26 @@ namespace Week6_DataAccess
         }
 
 
+        public IQueryable<AttendanceDetailsViewModel> GetAttendance(int studentId,
+           DateTime startDate, DateTime endDate, int unitId)
+        {
+            var list = (from attendance in _context.Attendances
+                        where attendance.StudentFK == studentId
+                        && attendance.DatePlaced >= startDate &&
+                        attendance.DatePlaced <= endDate
+                        && attendance.UnitFK == unitId
+                        orderby attendance.Student.Name ascending
+                        select new AttendanceDetailsViewModel()
+                        {
+                            DateTaken = attendance.DatePlaced,
+                            FullName = attendance.Student.Name + " " + attendance.Student.Surname,
+                            GroupName = attendance.Student.Group.Name,
+                            UnitName = attendance.Unit.Code,
+                            Status = attendance.Status.Name
+                        });
+
+            return list;
         }
+
+    }
 }
