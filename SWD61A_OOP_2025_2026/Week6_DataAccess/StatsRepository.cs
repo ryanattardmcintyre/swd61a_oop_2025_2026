@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,14 @@ namespace Week6_DataAccess
         public double GetAbsenteesim(int studentId)
         {
 
-            var absenteeism = from a in _context.Attendances
-                              where a.StudentFK == studentId
-                              group a by a.StudentFK into cluster
+            //3 records for student 1
+            //2 of which the student was absent (status absent = 2)
+            // (2/3) * 100%
+
+            var absenteeism = from attendance in _context.Attendances //foreach (var attendance in _context.Attendances)...
+                              where attendance.StudentFK == studentId //evaluating only attendances for studentId
+                              group attendance by attendance.StudentFK into cluster 
+                              //use group when you need to output a single (calculated) value from all your rows within a group
                               select
                                   ((cluster.Where(x => x.StatusFK == 2).Count() / (cluster.Count()*1.0)) * 100);
 
@@ -32,5 +38,70 @@ namespace Week6_DataAccess
             var percentage = absenteeism.FirstOrDefault();
             return percentage;
         }
+
+        //"4. Display the surname and how many students have got that surname"
+        //Attard - 2
+        //Zammit - 1
+        //Vella - 1
+        public List<SurnameCountViewModel> GetSurnameStats()
+        {
+            var list = from s in _context.Students
+                       group s by s.Surname into cluster
+                       orderby cluster.Count() descending
+                       select new SurnameCountViewModel() //selecting while creating instances of the view model
+                       {
+                           Surname = cluster.Key, //key will contain the value which we are grouping by
+                           Count = cluster.Count()
+                       };
+
+            return list.ToList();
+
+            /*
+            return _context.Students.GroupBy(x => x.Surname).OrderByDescending(x => x.Count())
+                .Select(x => new SurnameCountViewModel() { Count = x.Count(), Surname = x.Key }).ToList();
+            */
+        }
+
+        //Group - Count
+        //SWD61A - 3
+        //SWD61B - 1
+
+        public List<GroupCountViewModel> GetGroupStats()
+        {
+            var list = from s in _context.Students
+                       group s by s.Group.Name into cluster
+                       orderby cluster.Count() descending
+                       select new GroupCountViewModel() //selecting while creating instances of the view model
+                       {
+                           GroupName = cluster.Key, //key will contain the value which we are grouping by
+                           Count = cluster.Count()
+                       };
+
+            return list.ToList();
+        }
+
+        //Display monthly absenteeism and sort by the most missed month
+        //Feb - 60%
+        //Jan - 50%
+
+        public List<MonthlyAbsenteeismViewModel> GetMonthlyAbsenteeisms()
+        {
+            var list = from a in _context.Attendances
+                       group a by new
+                       {
+                           a.DatePlaced.Month,
+                           a.DatePlaced.Year
+                       } into cluster
+                       select new MonthlyAbsenteeismViewModel()
+                       {
+                            Month = cluster.Key.Month.ToString() ,
+                           //Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(cluster.Key.Month)
+                           Year = cluster.Key.Year,
+                           Abseentisim = ((cluster.Where(x => x.StatusFK == 2).Count() / (cluster.Count() * 1.0)) * 100)
+                       };
+            return list.ToList();
+        }
+
+
     }
 }

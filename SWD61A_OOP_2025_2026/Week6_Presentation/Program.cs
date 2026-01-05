@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,6 +84,15 @@ namespace Week6_Presentation
                 Console.WriteLine("1. Take attendance");
                 Console.WriteLine("2. List attendance for group & unit & day");
                 Console.WriteLine("3. Display Absenteesim for student");
+                
+                Console.WriteLine("4. Display the surname and how many students have got that surname");
+                Console.WriteLine("5. Display how many students there are per group");
+                Console.WriteLine("6. Display monthly absenteeism and sort by the most missed month"); //Jan - 50%, Feb - 70%, Mar - 30%
+                Console.WriteLine("7. Display monthly absenteeism for a specific student");
+                
+                
+                Console.WriteLine("8. Find the avg absenteesim for a student across different units");
+
                 Console.WriteLine("4. Top 5 present students");
                 Console.WriteLine("5. Top 5 present students for group");
                 Console.WriteLine("6. Top 5 present students for group within a date range");
@@ -229,7 +239,45 @@ namespace Week6_Presentation
                         Console.WriteLine("Press a key to continue...");
                         Console.ReadKey();
                         break;
-                
+
+                    case 4:
+                        var list = statsRepository.GetSurnameStats();
+                        
+                        foreach(var row in list)
+                        {
+                            Console.WriteLine($"{row.Surname} - {row.Count}");
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case 5:
+                        var list2 = statsRepository.GetGroupStats();
+
+                        foreach (var row in list2)
+                        {
+                            Console.WriteLine($"{row.GroupName} - {row.Count}");
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case 6:
+                        var list3 = statsRepository.GetMonthlyAbsenteeisms();
+
+                        foreach (var row in list3)
+                        {
+                            Console.WriteLine($"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Convert.ToInt16(row.Month))}" +
+                                $" - {row.Year}"+
+                                $" - {Math.Round(row.Abseentisim,2)}%");
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
                 }
 
             } while (attendanceMenuChoice != 999);
