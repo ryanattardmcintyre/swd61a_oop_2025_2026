@@ -90,14 +90,14 @@ namespace Week6_Presentation
                 Console.WriteLine("6. Display monthly absenteeism and sort by the most missed month"); //Jan - 50%, Feb - 70%, Mar - 30%
                 Console.WriteLine("7. Display monthly absenteeism for a specific student");
                 
-                
-                Console.WriteLine("8. Find the avg absenteesim for a student across different units");
+                Console.WriteLine("8. Find the Average absenteesim for a student.");
+                Console.WriteLine("9. In which month the student missed the most?");
 
-                Console.WriteLine("4. Top 5 present students");
-                Console.WriteLine("5. Top 5 present students for group");
-                Console.WriteLine("6. Top 5 present students for group within a date range");
+                Console.WriteLine("10. Top 2 present students");
+                Console.WriteLine("11. Top 2 present students for group");
+                Console.WriteLine("12. Top 2 present students for group within a date range");
 
-                Console.WriteLine("7. List attendance for student");
+                Console.WriteLine("13. List attendance for student");
 
                 Console.WriteLine("Input choice");
                 attendanceMenuChoice = Convert.ToInt32(Console.ReadLine());
@@ -272,6 +272,59 @@ namespace Week6_Presentation
                             Console.WriteLine($"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Convert.ToInt16(row.Month))}" +
                                 $" - {row.Year}"+
                                 $" - {Math.Round(row.Abseentisim,2)}%");
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case 7:
+
+                        Console.WriteLine("Input student id");
+                        var selectedStudentId = Convert.ToInt32(Console.ReadLine());
+
+                        var list4 = statsRepository.GetMonthlyAbsenteeismsForStudent(selectedStudentId);
+
+                        foreach (var row in list4)
+                        {
+                            Console.WriteLine($"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Convert.ToInt16(row.Month))}" +
+                                $" - {row.Year}" +
+                                $" - {Math.Round(row.Abseentisim, 2)}%");
+                        }
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case 8:
+                        Console.WriteLine("Input student id");
+                        var selectedStudentIdForTask8 = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Avg absenteesim for student is " +
+                               statsRepository.GetAvgMonthlyAbsenteeismsForStudent(selectedStudentIdForTask8));
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case 9:
+                        Console.WriteLine("Input student id");
+                        var selectedStudentIdForTask9 = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Top monthly absenteesim for student is " +
+                               statsRepository.GetTopMonthlyAbsenteeismsForStudent(selectedStudentIdForTask9));
+
+                        var allDetails = statsRepository.GetTopMonthlyAbsenteeismsForStudentAllValues(selectedStudentIdForTask9);
+                        Console.WriteLine($"Month: {allDetails.Month}, Year: {allDetails.Year}, Absenteeism: {allDetails.Abseentisim}");
+
+                        Console.WriteLine("Press a key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                 case 10:
+
+                        var listOfStudents10 = statsRepository.GetTop2PresentStudents();
+
+                        foreach(var student in listOfStudents10)
+                        {
+                            Console.WriteLine($"{student.Name} {student.Surname}");
                         }
 
                         Console.WriteLine("Press a key to continue...");
