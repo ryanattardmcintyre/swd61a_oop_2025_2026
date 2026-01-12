@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -41,7 +43,30 @@ namespace Week6_Presentation
                 Console.WriteLine("4. Attendances");
                 Console.WriteLine("5. Quit");
                 Console.WriteLine("Input your choice:");
-                mainMenuChoice = Convert.ToInt32(Console.ReadLine());
+                try //-must have
+                {
+                    mainMenuChoice = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Letters are not allowed. Type numbers from 1 to 5");
+                    mainMenuChoice = 5;
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Number is out of range - still not acceptable. Type numbers from 1 to 5");
+                    mainMenuChoice = 5;
+                }
+                catch (Exception) //for any unplanned exceptions -should have
+                {
+                    Console.WriteLine("An error has occurred. Type numbers from 1 to 5");
+                    mainMenuChoice = 5;
+                }
+                finally //always runs //optional
+                {
+                    Console.WriteLine("Leaving the main menu...");
+                }
+
 
                 switch (mainMenuChoice)
                 {
@@ -104,68 +129,115 @@ namespace Week6_Presentation
 
                 switch (attendanceMenuChoice) {
                     case 1:
-
-                        //---------------------- asking the user choose group ------------------
-                        Console.WriteLine();
-                        Console.WriteLine("Id - Group");
-                        Console.WriteLine("-----------------------");
-                        foreach (var group in groupsRepository.Get())
+                        try
                         {
-                            Console.WriteLine($"{group.Id} - {group.Name}");
-                        }
+                            //---------------------- asking the user choose group ------------------
 
-                        Console.WriteLine("Type in the group ID");
-                        int groupId = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine();
+                            Console.WriteLine("Id - Group");
+                            Console.WriteLine("-----------------------");
+                            int groupId = 0;
+                            try
+                            {
+                                foreach (var group in groupsRepository.Get())
+                                {
+                                    Console.WriteLine($"{group.Id} - {group.Name}");
+                                }
 
-                        //---------------------- asking the user choose unit ------------------
-
-                        Console.WriteLine();
-                        Console.WriteLine("Id - Unit");
-                        Console.WriteLine("-----------------------");
-                        foreach (var unit in unitsRepository.Get())
-                        {
-                            Console.WriteLine($"{unit.Id} - {unit.Code} - {unit.Programme}");
-                        }
-
-                        Console.WriteLine("Type in the unit ID");
-                        int unitId = Convert.ToInt32(Console.ReadLine());
-
-                        //-------------------- taking the attendance for all students ---------
-
-                        //1. implement statusesRepository
-                        //2. get a list of students in selected group <- this has been done
-                        //3. foreach student in list 
-
-                        var listOfStudents = studentsRepository.GetByGroup(groupId);
-                        List<Attendance> attendanceList = new List<Attendance>();
-                        foreach(var student in listOfStudents)
-                        {
-                            //3a show details of student
-                            Console.WriteLine($"{student.Id} - {student.Name} {student.Surname}");
-                            //3b display the statuses on screen like in Units and Groups
-                            Console.WriteLine($"Choose the right status by inputting the id next to it");
-                            foreach (var status in statusRepository.Get())
-                            { 
-                                Console.Write($"{status.Id} - {status.Name} | ");
+                                Console.WriteLine("Type in the group ID");
+                                groupId = Convert.ToInt32(Console.ReadLine());
                             }
 
-                            //3c ask for the input
-                            int statusForStudent = Convert.ToInt32(Console.ReadLine());
+                           
+                            catch (EntityException ex) //inner exceptions
+                            {
+                                string errorMessage = "Failed to connect with the database";
+                                Console.WriteLine(errorMessage);
 
-                            //3d record the attendance record in a temp list
-                            attendanceList.Add(new Attendance() { 
-                               StatusFK = statusForStudent,
-                                StudentFK = student.Id, UnitFK = unitId
-                            });
+                                new Logging().Log(ex, errorMessage);
+
+                                Console.ReadKey();
+                                throw; //it will re-throw the exception generated
+                            }
+                            catch (FormatException) //inner exceptions
+                            {
+                                Console.WriteLine("Choose from the group ids displayed");
+                                Console.ReadKey();
+                                throw;
+                            }
+                            catch (Exception ex) //inner exceptions
+                            {
+                                Console.WriteLine("An error has occurred. We will investigate");
+                                Console.ReadKey();
+                                throw;
+                            }
+
+
+
+                            //---------------------- asking the user choose unit ------------------
+
+                            Console.WriteLine();
+                            Console.WriteLine("Id - Unit");
+                            Console.WriteLine("-----------------------");
+                            foreach (var unit in unitsRepository.Get())
+                            {
+                                Console.WriteLine($"{unit.Id} - {unit.Code} - {unit.Programme}");
+                            }
+
+                            Console.WriteLine("Type in the unit ID");
+                            int unitId = Convert.ToInt32(Console.ReadLine());
+
+                            //-------------------- taking the attendance for all students ---------
+
+                            //1. implement statusesRepository
+                            //2. get a list of students in selected group <- this has been done
+                            //3. foreach student in list 
+
+                            var listOfStudents = studentsRepository.GetByGroup(groupId);
+                            List<Attendance> attendanceList = new List<Attendance>();
+                            foreach (var student in listOfStudents)
+                            {
+                                //3a show details of student
+                                Console.WriteLine($"{student.Id} - {student.Name} {student.Surname}");
+                                //3b display the statuses on screen like in Units and Groups
+                                Console.WriteLine($"Choose the right status by inputting the id next to it");
+                                foreach (var status in statusRepository.Get())
+                                {
+                                    Console.Write($"{status.Id} - {status.Name} | ");
+                                }
+
+                                //3c ask for the input
+                                int statusForStudent = Convert.ToInt32(Console.ReadLine());
+
+                                //3d record the attendance record in a temp list
+                                attendanceList.Add(new Attendance()
+                                {
+                                    StatusFK = statusForStudent,
+                                    StudentFK = student.Id,
+                                    UnitFK = unitId
+                                });
+                            }
+
+                            //3e after the loop call the TakeAttendance(List...)
+                            try
+                            {
+                                attendancesRepository.TakeAttendances(attendanceList);
+                                Console.WriteLine("Attendance saved!! Press any button to go back to the Attendances menu...");
+                            }
+                            catch (StatusOutOfRangeException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+
+
+                           
+                            Console.ReadKey();
                         }
-
-                        //3e after the loop call the TakeAttendance(List...)
-                        attendancesRepository.TakeAttendances(attendanceList);
-
-
-                        Console.WriteLine("Attendance saved!! Press any button to go back to the Attendances menu...");
-                        Console.ReadKey();
-
+                        catch (Exception) //outer exception
+                        {
+                            Console.WriteLine("Error handled. Press a key to continue");
+                            Console.ReadKey();
+                        }
 
                         break;
 

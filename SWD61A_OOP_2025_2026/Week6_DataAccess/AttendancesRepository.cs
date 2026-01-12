@@ -29,9 +29,16 @@ namespace Week6_DataAccess
 
         public void TakeAttendances(List<Attendance> attendances) 
         {
+
+
             var dateTaken = DateTime.Now;
             foreach (var attendance in attendances)
             {
+                if(attendance.StatusFK >= 5 || attendance.StatusFK <= 0)
+                {
+                    throw new StatusOutOfRangeException(1, 4);
+                }
+
                 attendance.DatePlaced = dateTaken;
                 TakeAttendance (attendance);
             }
