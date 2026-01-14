@@ -64,6 +64,7 @@ namespace Week6_Presentation
                 }
                 finally //always runs //optional
                 {
+//                    Console.Clear();
                     Console.WriteLine("Leaving the main menu...");
                 }
 
@@ -458,7 +459,7 @@ namespace Week6_Presentation
 
                         foreach (var student in list2)
                         {
-                            Console.WriteLine($"{student.Name}\t\t{student.Surname}\t\t -\t {student.Id}");
+                            Console.WriteLine($"{student.Name}\t\t{student.Surname}\t\t -\t {student.Id} - {student.Group.Name}");
                         }
 
                         Console.WriteLine("Click any button to return back to Students Menu...");

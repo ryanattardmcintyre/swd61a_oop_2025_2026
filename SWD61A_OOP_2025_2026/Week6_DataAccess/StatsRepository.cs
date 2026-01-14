@@ -265,5 +265,20 @@ namespace Week6_DataAccess
 
             return list.ToList(); //sql: Select top 2
         }
+
+
+        //Task: return the student which had the most absenteeism
+
+        public Student GetStudentWithMostAbsenteeism()
+        {
+            var myTopStudent = (from a in _context.Attendances
+                                group a by a.Student into cluster
+                                orderby ((cluster.Where(x => x.StatusFK == 2).Count() / (cluster.Count() * 1.0)) * 100) descending
+                                select cluster.Key).FirstOrDefault();
+
+            return myTopStudent;
+        }
+
+
     }
 }
